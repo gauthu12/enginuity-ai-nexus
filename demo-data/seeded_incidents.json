@@ -1,0 +1,47 @@
+[
+  {
+    "id": "inc-2001",
+    "release_id": "rel-2025-007",
+    "detected_at": "2025-04-04T23:30:00Z",
+    "summary": "Retry loop causing CPU overload",
+    "root_cause": "Unbounded retries from external API failures",
+    "resolved": true,
+    "postmortem": "Limited retries to 3 and added circuit breaker logic"
+  },
+  {
+    "id": "inc-2002",
+    "release_id": "rel-2025-009",
+    "detected_at": "2025-04-05T20:00:00Z",
+    "summary": "Memory leak in ML inference job",
+    "root_cause": "Model not releasing GPU memory after batch jobs",
+    "resolved": true,
+    "postmortem": "Wrapped model in context manager and tested in sandbox"
+  },
+  {
+    "id": "inc-2003",
+    "release_id": "rel-2025-002",
+    "detected_at": "2025-04-02T01:00:00Z",
+    "summary": "Slow API response time",
+    "root_cause": "Rate limit exceeded on internal service calls",
+    "resolved": true,
+    "postmortem": "Added exponential backoff and request throttling"
+  },
+  {
+    "id": "inc-2004",
+    "release_id": "rel-2025-004",
+    "detected_at": "2025-04-03T11:15:00Z",
+    "summary": "Users stuck behind feature flag",
+    "root_cause": "Flag misconfigured for production environment",
+    "resolved": true,
+    "postmortem": "Updated flag scope and improved preview testing"
+  },
+  {
+    "id": "inc-2005",
+    "release_id": "rel-2025-001",
+    "detected_at": "2025-04-01T12:15:00Z",
+    "summary": "Login failures during peak hours",
+    "root_cause": "Database connection pool exhausted",
+    "resolved": true,
+    "postmortem": "Increased max pool size and introduced failover logic"
+  }
+]

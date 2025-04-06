@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enginuity AI Nexus</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <h1 class="text-3xl font-bold mb-4">🚀 Enginuity AI Nexus</h1>
+  <div class="mb-4">
+    <button onclick="showTab('dashboard')" class="tab-btn">Dashboard</button>
+    <button onclick="showTab('release')" class="tab-btn">Release DNA</button>
+    <button onclick="showTab('incident')" class="tab-btn">Incidents</button>
+    <button onclick="showTab('greenops')" class="tab-btn">GreenOps</button>
+    <button onclick="showTab('chat')" class="tab-btn">AI Chat Copilot</button>
+  </div>
+
+  <div id="dashboard" class="tab-content">Welcome! Use the tabs above.</div>
+  <div id="release" class="tab-content hidden"><pre id="release-data"></pre></div>
+  <div id="incident" class="tab-content hidden">
+    <button onclick="simulateIncident()" class="bg-red-600 text-white px-4 py-2 rounded">Simulate Incident</button>
+    <pre id="incident-data"></pre>
+  </div>
+  <div id="greenops" class="tab-content hidden">Carbon cost: <span id="carbon">...</span></div>
+  <div id="chat" class="tab-content hidden">
+    <input id="user-input" class="border p-2 w-full" placeholder="Ask AI..." />
+    <button onclick="sendMessage()" class="bg-blue-600 text-white px-4 py-2 mt-2 rounded">Send</button>
+    <div id="chat-response" class="mt-4 font-mono"></div>
+  </div>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(e => e.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    async function simulateIncident() {
+      const res = await fetch('/api/simulate-incident', { method: 'POST' });
+      const data = await res.json();
+      document.getElementById('incident-data').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function sendMessage() {
+      const msg = document.getElementById('user-input').value;
+      const res = await fetch('/api/ai-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+      const data = await res.json();
+      document.getElementById('chat-response').textContent = data.response;
+    }
+
+    fetch('/api/releases').then(res => res.json()).then(data => {
+      document.getElementById('release-data').textContent = JSON.stringify(data, null, 2);
+      document.getElementById('carbon').textContent = data[0].carbon_cost;
+    });
+  </script>
+
+  <style>
+    .tab-btn { background: #eee; padding: 8px 16px; margin: 0 4px; border-radius: 6px; font-weight: bold; }
+    .tab-content { padding: 1rem; margin-top: 1rem; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .hidden { display: none; }
+  </style>
+</body>
+</html>
+
